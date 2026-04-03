@@ -5,7 +5,7 @@ const LABELS = [
 ];
 
 const CONFIG = {
-    modelPath: "model.onnx?v=3",
+    modelPath: "model.onnx",
     imageSize: 224,
     mean: [0.485, 0.456, 0.406],
     std: [0.229, 0.224, 0.225]
