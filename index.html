@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WasteScan Pro: Advanced Neural Analysis for Waste Classification. A comparative study implementation of DenseNet-169, Inception-v4, and EfficientNet-B2.">
+    <meta name="keywords" content="ML Project, Waste Classification, DenseNet-169, Inception-v4, EfficientNet-B2, AI Recycling">
+    <title>WasteScan Pro | Neural Analysis Console</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+    <link rel="icon" type="image/webp" href="static/icon.webp">
+</head>
+<body>
+    <div class="workspace-layout">
+        <!-- Sidebar Workspace System -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="static/icon.webp" alt="Logo" class="brand-icon">
+                <h1>WASTESCAN</h1>
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    <span>Analysis Console</span>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-icon">📁</span>
+                    <span>Datasets</span>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Engine Config</span>
+                </li>
+            </ul>
+
+            <div class="system-monitor">
+                <h4 style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.8rem; letter-spacing: 1.5px; font-weight: 800;">Hardware Diagnostics</h4>
+                <div class="status-box">
+                    <div id="model-status" style="font-size: 0.75rem; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 6px; height: 6px; background: #fbbf24; border-radius: 50%;"></span>
+                        ENGINE: STANDBY
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer" style="margin-top: auto; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                <p style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">System v5.0.4</p>
+                <p style="font-size: 0.65rem; color: var(--text-muted);">DenseNet-169 Optimized</p>
+            </div>
+        </aside>
+
+        <!-- Main Analysis Viewport -->
+        <main class="main-viewport">
+            <header class="header-top">
+                <h2>Neural Analysis Console</h2>
+                <div class="user-chip">Instance: WebGL_v5_Safe</div>
+            </header>
+
+            <div class="dashboard-grid">
+                
+                <!-- Input Stream Area -->
+                <div class="bento-card upload-card">
+                    <h3 style="font-size: 0.7rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 800;">Binary Input Stream</h3>
+                    <div class="compact-upload" id="drop-zone">
+                        <span class="upload-icon">📥</span>
+                        <p>Drop neural signal or <span class="browse-action">Browse</span></p>
+                        <input type="file" id="file-input" hidden accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Neural Analysis Results Monitor -->
+                <div class="bento-card results-card">
+                    <h3 style="font-size: 0.7rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 800;">Inference Telemetry</h3>
+                    
+                    <div id="results-panel" class="hidden" style="flex: 1; display: flex; align-items: center;">
+                        <div class="analysis-viewer">
+                            <div class="analysis-image-frame">
+                                <img id="image-preview" src="#" alt="Object Preview">
+                            </div>
+                            <div class="analysis-details">
+                                <span class="status-tag">Classification Validated</span>
+                                <h1 class="prediction-title" id="prediction-text">Analyzing...</h1>
+                                <div class="prob-bar-container">
+                                    <div id="confidence-fill" class="prob-bar-fill"></div>
+                                </div>
+                                <p id="confidence-text">Match Strength: 0.0%</p>
+                                <button class="btn-secondary" id="reset-btn">New Inference</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder -->
+                    <div id="placeholder-text" style="flex: 1; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border); border-radius: var(--radius-md);">
+                        <p style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;">Awaiting input parity. Upload Image to initialize.</p>
+                    </div>
+                </div>
+
+                <!-- System Telemetry -->
+                <div class="bento-card stats-grid-card">
+                    <h3 style="font-size: 0.7rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 800;">Engine Parameters</h3>
+                    <div class="spec-grid">
+                        <div class="spec-item"><p class="spec-label">Latency</p><p class="spec-value">~ 12ms</p></div>
+                        <div class="spec-item"><p class="spec-label">Input Size</p><p class="spec-value">224² px</p></div>
+                        <div class="spec-item"><p class="spec-label">Model</p><p class="spec-value">DenseNet</p></div>
+                        <div class="spec-item"><p class="spec-label">Precision</p><p class="spec-value">FP32 Web</p></div>
+                    </div>
+                </div>
+
+                <!-- Neural Metadata -->
+                <div class="bento-card info-card-small">
+                    <h3 style="font-size: 0.7rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 800;">Encoded Classes</h3>
+                    <div class="classes-box">
+                        <span class="class-chip">Cardboard</span>
+                        <span class="class-chip">Organic</span>
+                        <span class="class-chip">Glass</span>
+                        <span class="class-chip">Metal</span>
+                        <span class="class-chip">Trash</span>
+                        <span class="class-chip">Paper</span>
+                        <span class="class-chip">Plastic</span>
+                        <span class="class-chip">Textile</span>
+                        <span class="class-chip">Vegetation</span>
+                    </div>
+                </div>
+
+                <!-- About Section -->
+                <div class="bento-card about-card" id="about-section">
+                    <h3 style="font-size: 0.7rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 800;">About WasteScan Pro</h3>
+                    <div class="about-grid">
+                        <div class="about-item">
+                            <h4>The Project</h4>
+                            <p>WasteScan Pro is an intelligent waste classification system designed to promote sustainable recycling practices. By leveraging state-of-the-art machine learning, we aim to eliminate human error in waste segregation for a cleaner future.</p>
+                        </div>
+                        <div class="about-item">
+                            <h4>Core Engine</h4>
+                            <p>This application specifically utilizes the <strong>DenseNet-169</strong> neural architecture, optimized for high-speed edge inference. The model provides exceptional precision in recognizing complex material patterns with minimal computational overhead.</p>
+                        </div>
+                        <div class="about-item">
+                            <h4>The Impact</h4>
+                            <p>Proper waste classification is the first step toward a circular economy. Our platform empowers users to identify recyclable materials instantly, contributing to global environmental conservation efforts.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
