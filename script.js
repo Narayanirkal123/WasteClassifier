@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Explicitly set to 100% and solidified state
             if (progressFill) {
                 progressFill.style.width = "100%";
-                progressFill.style.backgroundColor = "var(--accent, #4ade80)"; 
+                progressFill.style.backgroundColor = "var(--ok, #1f8a57)";
             }
             
             safeSetText(modelStatus, "🧠 AI ENGINE ONLINE");
@@ -89,16 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = "var(--accent, #4ade80)";
+            dropZone.style.borderColor = "var(--brand, #1f6b4a)";
         });
 
         dropZone.addEventListener('dragleave', () => {
-            dropZone.style.borderColor = "rgba(255,255,255,0.1)";
+            dropZone.style.borderColor = "var(--line-strong, #b3c5ba)";
         });
 
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = "rgba(255,255,255,0.1)";
+            dropZone.style.borderColor = "var(--line-strong, #b3c5ba)";
             if (e.dataTransfer.files.length > 0) handleImage(e.dataTransfer.files[0]);
         });
     }
